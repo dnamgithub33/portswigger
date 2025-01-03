@@ -51,4 +51,56 @@
 
     Việc dò các API doc bị lộ này có thể dùng tool như ```Burp Scanner``` để rà quét.
 
+3. Lab: Finding and exploiting an unused API endpoint
+
+    Để hoàn thành bài lab ta cần hoàn mua được sản phẩm Lightweight l33t Leather Jacket. Nhưng hoàn toàn không đủ số dư.
+
+    ![img](/API_testing_img/9.png)
+
+    Trong HTTP History, có một request lấy thông tin sản phẩm như sau:
+
+    ![img](/API_testing_img/10.png)
+
+    Thử dùng Method OPTIONS để xem các method cho phép đến API này:
+
+    ![img](/API_testing_img/11.png)
+    
+    Trong đó method ```PATCH``` cho phép cập nhật một phần tài nguyên. Tiến hành chỉnh sửa giá của sản phẩm để mua được:
+
+    ![img](/API_testing_img/12.png)
+
+    Và rồi có thể mua được sản phẩm:
+
+    ![img](/API_testing_img/13.png)
+
+
+
+
+
+
+
+
+
+
+
+4. Lab: Exploiting a mass assignment vulnerability
+
+    Tương tự bài trước, bài này cần mua được sản phẩm Lightweight l33t Leather Jacket
+
+    ![img](/API_testing_img/14.png)
+
+    Ta có gói tin để lấy thông tin giỏ hàng như sau:
+
+    ![img](/API_testing_img/15.png)
+
+    và gói tin để thêm mặt hàng vào giỏ:
+
+    ![img](/API_testing_img/16.png)
+
+    Tiến hành ```POST``` JSON sản phẩm có mã giảm giá 100% vào giỏ hàng:
+
+    ![img](/API_testing_img/17.png)
+
+
+
 
