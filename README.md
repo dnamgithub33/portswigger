@@ -101,6 +101,50 @@
 
     ![img](/API_testing_img/17.png)
 
+    Và mua được sản phẩm mà không phải trả tiền.
 
 
+
+
+5. Lab: Exploiting server-side parameter pollution in a query string
+
+    Ở bài lab này, chúng ta cần truy cập được vào tải khoản ```administrator``` để xóa tài khoản ```carlos```.
+
+    ![img](/API_testing_img/18.png)
+
+    Ở chức năng quên mật khẩu, lab yêu cầu nhập tên tài khoản để gửi mã về email:
+
+    ![img](/API_testing_img/19.png)
+
+    ![img](/API_testing_img/20.png)
+
+    Xem gói tin quên mật khẩu như sau:
+
+    ![img](/API_testing_img/21.png)
+
+    Tiến hành thêm dấu ```#``` được URL encode để cắt truy vấn:
+
+    ![alt text](/API_testing_img/22.png)
+
+    Kết quả trả về thông báo trường ```field``` chưa được chỉ định. Thêm trường ```field=x``` để xem có hiện tượng gì xảy ra:
+
+    ![img](/API_testing_img/23.png)
+
+    Có vẻ như ```field``` là một trường bắt buộc phải chính xác theo logic của server, phải được sử dụng trong server. Dễ nhận thấy ```username``` được sử dụng trong server, thử thay giá trị của ```field``` là username thử xem:
+
+    ![img](/API_testing_img/24.png)
+
+    Trường này nó đã thay đổi từ email sang username, điều này chứng tỏ đây là vị trí có thể can thiệp vào logic của server. Vậy, nó đã gửi đến email thứ gì để tạo lại mật khẩu?
+
+    Theo logic thông thường thì server sẽ gửi một token được giới hạn thời gian đến mail của người dùng. Token đó được sinh bởi server nên nhiệm vụ bây giờ phải tìm được tên của token đó được tạo bởi server là gì.
+
+    Tìm kiếm trong đoạn code js bên frontend, ta thấy có một đoạn xử lý token reset password như sau:
+
+    ![alt text](/API_testing_img/25.png)
+
+    Ở đây, nó lấy token từ một trường ```reset-token```. Thử trích xuất trường đó nhưng lại lỗi. Thử tên trường sau đó sử dụng là ```reset_token``` thì lấy được token. Có vẻ như việc gửi đi đường dẫn reset password chứa token thì server sử dụng trường ```reset-token``` còn lúc xử lý trường để reset password thì sử dụng ```reset_token``` để xử lý ở server
+
+    ![img](/API_testing_img/26.png)
+
+    Tiến hành reset với token này và hoàn thành bài lab
 
