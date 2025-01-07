@@ -1,5 +1,7 @@
 [API testing](#api-testing)
 
+[Web LLM attacks](#web-llm-attacks)
+
 # API testing
 
 1. API recon
@@ -151,3 +153,52 @@
 6. Testing for server-side parameter pollution in REST paths
 
     Ở phần này, ta có một hướng tấn công Path Traversal khá độc lạ. Ở đây, chức năng cho phép một trường trong phương thức GET để xác định user mà nó hiển thị thông tin: ```GET /edit_profile.php?name=peter```. Từ lời gọi này trang web sẽ chuyển hướng đến ```GET /api/private/users/peter```. Mà có thể ```GET /api/private/users/peter``` được gọi từ server khác mà phía client không thể tiếp cận được. Vậy, việc tấn công Path Traversal ở đây thực hiện như thế nào? Đó là truyền các tham số độc hại vào trường ```name``` ban đầu để hệ thống xử lý sai dẫn đến khai thác lỗ hổng.
+
+# Web LLM attacks
+
+1. LLMs là gì?
+
+    Các mô hình ngôn ngữ lớn (Large Language Models - LLMs) là các thuật toán trí tuệ nhân tạo có khả năng xử lý đầu vào của người dùng và tạo ra các phản hồi hợp lý bằng cách dự đoán chuỗi từ. Chúng được huấn luyện trên các tập dữ liệu bán công khai khổng lồ, sử dụng học máy để phân tích cách các thành phần của ngôn ngữ kết hợp với nhau.
+
+    - LLMs thường cung cấp giao diện trò chuyện để nhận đầu vào từ người dùng, gọi là "prompt". Đầu vào này được kiểm soát một phần bởi các quy tắc xác thực đầu vào.
+
+    - LLMs có thể được áp dụng trong nhiều trường hợp sử dụng trên các trang web hiện đại:
+
+        - Dịch vụ khách hàng, chẳng hạn như trợ lý ảo.
+        - Dịch thuật.
+        - Cải thiện SEO.
+        - Phân tích nội dung do người dùng tạo, ví dụ để theo dõi giọng điệu của các bình luận trên trang.
+
+2. Tấn công LLM và prompt injection.
+
+    Nhiều cuộc tấn công vài web LLM dựa trên công nghệ được biết là prompt injection. Đây là nơi mà các kẻ tấn công sử dụng các prompt để kiểm soát đầu ra của LLM. Prompt injection có thể cho kết quả cái mà AI hành động ngoài dự tính của nó như là tạo các lời gọi không đúng đến các API nhạy cảm và trả những kết quả không tương xứng với thiết kế ban đầu.
+
+3. Phát hiện lỗ hổng LLM.
+    
+    - Xác định các đầu vào của LLM kể cả trực tiếp lẫn gián tiếp.
+    - Giới hạn các dữ liệu mà LLM được phép truy cập.
+    - Thăm dò các điểm có thể xảy ra lỗ hổng.
+
+4. Lab: Exploiting LLM APIs with excessive agency
+
+    Để hoàn thành lab, ta phải dùng chức năng live chat để xóa tài khoản ```carlos```.
+
+    ![img](/Web_LLM_attacks_img/1.png)
+
+    Đầu tiên, thử yêu cầu AI xóa trực tiếp tài khoản ```carlos``` thì không được:
+
+    ![img](/Web_LLM_attacks_img/2.png)
+
+    Thử hỏi nó xem nó sử dụng API nào thì nhận được kết quả:
+
+    ![img](/Web_LLM_attacks_img/3.png)
+
+    Ở đây có thể thấy AI sử dụng một API ```debug_sql``` để thực thi lệnh truy vấn cơ sở dữ liệu một cách trực tiếp. Tiến hành thử truy vấn CSDL để lấy ra các user trong bảng users:
+
+    ![img](/Web_LLM_attacks_img/4.png)
+
+    Tiến hành xóa user ```carlos```:
+
+    ![img](/Web_LLM_attacks_img/5.png)
+
+    
