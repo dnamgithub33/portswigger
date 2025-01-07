@@ -148,3 +148,6 @@
 
     Tiến hành reset với token này và hoàn thành bài lab
 
+6. Testing for server-side parameter pollution in REST paths
+
+    Ở phần này, ta có một hướng tấn công Path Traversal khá độc lạ. Ở đây, chức năng cho phép một trường trong phương thức GET để xác định user mà nó hiển thị thông tin: ```GET /edit_profile.php?name=peter```. Từ lời gọi này trang web sẽ chuyển hướng đến ```GET /api/private/users/peter```. Mà có thể ```GET /api/private/users/peter``` được gọi từ server khác mà phía client không thể tiếp cận được. Vậy, việc tấn công Path Traversal ở đây thực hiện như thế nào? Đó là truyền các tham số độc hại vào trường ```name``` ban đầu để hệ thống xử lý sai dẫn đến khai thác lỗ hổng.
